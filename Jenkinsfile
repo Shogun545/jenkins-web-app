@@ -23,8 +23,17 @@ pipeline {
 
         stage('Push') {
             steps {
-                sh "docker push ${DOCKER_USER}/${APP_NAME}:${IMAGE_TAG}"
-                sh "docker push ${DOCKER_USER}/${APP_NAME}:latest"
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub',
+                    usernameVariable: 'USER',
+                    passwordVariable: 'PASS'
+                )]) {
+                    sh '''
+                    echo $PASS | docker login -u $USER --password-stdin
+                    docker push phuwit09/my-nginx:${IMAGE_TAG}
+                    docker push phuwit09/my-nginx:latest
+                    '''
+                }
             }
         }
 
