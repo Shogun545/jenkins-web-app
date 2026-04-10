@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'k8s-agent-1' }
+    agent any
 
     environment {
         DOCKER_USER = 'phuwit09'
